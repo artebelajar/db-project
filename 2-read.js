@@ -1,6 +1,7 @@
 import pool from './utils/db.js';
+import { closeInput } from './utils/readline.js';
  
-async function lihatSantri() {
+export default async function lihatSantri() {
   try {
     const res = await pool.query('SELECT * FROM santri ORDER BY id ASC');
  
@@ -18,7 +19,6 @@ async function lihatSantri() {
     console.error('failed add a student:', err.stack);
   } finally {
     await pool.end();
+    await closeInput();
   }
 }
- 
-lihatSantri();

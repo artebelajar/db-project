@@ -1,7 +1,7 @@
 import pool from './utils/db.js';
-import {inputData, closeInput} from './utils/app.js'
+import {inputData, closeInput} from './utils/readline.js'
 
-async function updateSantri() {
+export default async function updateSantri() {
   try {
 
     const choice_id = await inputData("how much id update:");
@@ -18,5 +18,3 @@ async function updateSantri() {
     closeInput()
   }
 }
- 
-updateSantri();

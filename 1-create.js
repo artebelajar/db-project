@@ -1,7 +1,7 @@
 import pool from './utils/db.js';
-import {inputData, closeInput} from './utils/app.js'
+import {inputData, closeInput} from './utils/readline.js'
  
-async function tambahSantri() {
+export default async function tambahSantri() {
   try {
     const namaSantri = await inputData("student name?");
     const alamatSantri = await inputData('student address?');
@@ -18,6 +18,3 @@ async function tambahSantri() {
     await closeInput();
   }
 }
- 
-
-tambahSantri();

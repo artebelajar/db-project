@@ -17,8 +17,5 @@ export default async function lihatSantri() {
  
   } catch (err) {
     console.error('failed add a student:', err.stack);
-  } finally {
-    await pool.end();
-    await closeInput();
-  }
+  } 
 }

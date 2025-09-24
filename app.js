@@ -1,4 +1,5 @@
-import {inputData, closeInput} from './utils/readline.js';
+import { inputData, closeInput } from './utils/readline.js';
+import pool from './utils/db.js';
 import tambahSantri from './1-create.js';
 import lihatSantri from './2-read.js';
 import updateSantri from './3-update.js';
@@ -13,45 +14,24 @@ function showMenu() {
   console.log("0) Close Shop");
 }
 
-function coffeeService() {
-  console.log("\n— Coffee Menu —");
-  const cups = askNumber("How many cups", 1);
-  const sugar = askNumber("Sugar (tsp per cup)", 1);
-  const withMilk = askBoolean("With milk?", false);
-  const result = makeCoffee({ cups, sugar, withMilk });
-  console.log("\n" + result + "\n");
+async function askCreate() {
+  const namaSantri = await inputData("student name?");
+  const alamatSantri = await inputData('student address?');
+  console.log(namaSantri, alamatSantri);
+  await tambahSantri(namaSantri, alamatSantri);
 }
 
-function teaService() {
-  console.log("\n— Tea Menu —");
-  const cups = askNumber("How many cups", 1);
-  const sugar = askNumber("Sugar (tsp per cup)", 1);
-  const teaBag = askBoolean("add Tea Bag?", false);
-  const lemonSqueeze = askBoolean("add lemonsqueeze?", false);
-  console.log(cups, sugar, teaBag, lemonSqueeze);
-  const result = makeTea({ cups, sugar, teaBag, lemonSqueeze });
-  console.log("\n" + result + "\n");
+
+async function askUpdate() {
+  const choice_id = await inputData("how much id update:");
+  const choice_nama = await inputData("new name?:")
+  const choice_alamat = await inputData("new address?")
+  await updateSantri(choice_id, choice_nama, choice_alamat);
 }
 
-function friedRiceService() {
-  console.log("\n— Fried Chicken Menu —");
-  const servings = askNumber("How many servings", 1);
-  const spicy = askNumber("spicy level (0-5)", 1);
-  const egg = askBoolean("with egg?", false);
-  const chicken = askBoolean("with chicken?", false);
-  console.log(servings, spicy, egg, chicken);
-  const result = makeFriedRice({servings, spicy, egg, chicken});
-  console.log("\n" + result + "\n");
-}
-
-function grilledChickenService() {
-  console.log("\n— Grilled Chicken Menu —");
-  const servings = askNumber("How many servings", 1);
-  const sweet = askNumber("sweet level (0-5)", 1);
-  const spice = askBoolean("with spice?", false);
-  const grilling = askNumber("grilling time?", 1);
-  const result = makeGrilledChicken({servings, sweet, spice, grilling});
-  console.log("\n" + result + "\n");
+async function askDelete() {
+  const choice_id = await inputData("how much id will delete:");
+  await deleteSantri(choice_id);
 }
 
 async function serviceLoop() {
@@ -61,23 +41,24 @@ async function serviceLoop() {
 
     switch (choice) {
       case "1":
-        tambahSantri();
+        await askCreate();
         break;
 
       case "2":
-        lihatSantri()
+        await lihatSantri()
         break;
 
       case "3":
-        updateSantri()
+        await askUpdate()
         break;
 
       case "4":
-        deleteSantri()
+        await askDelete()
         break
 
       case "0":
         console.log("\nShop closed. Thank you.\n");
+        await pool.end()
         await closeInput()
         return;
 
